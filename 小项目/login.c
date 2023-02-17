@@ -168,6 +168,6 @@ void ManageSystem(void)
 
 	system("clear");
 
-	user_login(person);
+	// user_login(person);
     administrator(person);
 }

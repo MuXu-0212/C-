@@ -16,6 +16,7 @@ void admi_menu()
 	printf("\t1. increase new user\n");
 	printf("\t2. delete a user\n");
 	printf("\t3. revise user's information\n");
+	printf("\t4. find user's information\n");
 	printf("\t0. exit system\n");
 	print_(40);
 
@@ -99,6 +100,7 @@ int admi_add(p_user h)
 		
 		if (input >=0 && input <=2)
 		{
+			system("clear");
 			printf("increase successfully!\n");
 		}
 		else
@@ -125,7 +127,7 @@ int admi_add(p_user h)
 	}
 }
 
-//删除用户
+//删除用户功能
 int admi_delete(p_user h)
 {
 	int flag=0;
@@ -170,11 +172,178 @@ int admi_delete(p_user h)
 			printf("error, input again!\n\n");
 		}		
 	}
+}
+
+//管理员修改菜单
+void admi_revise_menu()
+{
+	print_(40);
+	printf("\t     revise menu\n");
+	printf("\t1. adjust user's grade\n");
+	printf("\t2. find user's information\n");
+	printf("\t0. return to administrator\n");
+	print_(40);
+}
+
+//管理员调整用户等级的菜单
+void admi_revise_adjust_menu()
+{
+	print_(40);
+	printf("\t    adjust user'grade\n");
+	printf("\t0. to becomem administrator\n");
+	printf("\t1. to become vip\n");
+	printf("\t2. to become common\n");
+	printf("\t3. return\n");
+	print_(40);
+}
+
+//校验账号
+int admi_revise_adjust_IdCompare(p_user h)
+{
+	char id[MAXSIZE_ID]={0};
+	printf("input id that needs to be adjusted!\n");
+	scanf("%[^\n]", id);
+	while (getchar()!='\n');
+
+	int input=0;
+	user* p = h;
+	while (p->next != NULL)
+	{
+		if (!strcmp(p->id, id))
+		{
+			admi_revise_adjust_menu();
+			scanf("%d", &input);
+			if (input >=0 && input <=2) /*0、1、2分别代表三个等级的用户*/
+			{
+				p->flag = input;
+				printf("master, this user'grade is revised!\n");
+				return 0;
+			} 
+			else /*非法输入*/
+			{
+				printf("id doesn't matched!\n");
+				printf("input again!\n\n");
+				return 1;				
+			}
+		} /*if (!strcmp(p->id, id)) 账号匹配*/
+		p=p->next;
+	}
+	printf("id doesn't matched!\n");
+	printf("input again!\n\n");
+	return 1;
+}
+
+//管理员调整用户等级的功能
+int admi_revise_adjust(p_user h)
+{
+	int input=0;
+	user* temp=0;
+
+	while (admi_revise_adjust_IdCompare( h));
+}
+
+//账号信息查询
+int admi_revise_find(p_user h)
+{
+	if (h->next == NULL)
+	{
+		printf("表空！\n");
+		return 1;
+	}
+
+	user* p = NULL;
+	int i=0,j=0,k=0;
+	int input=0;
+	system("clear");
+
+	print_(40);
+	printf("grade\t\tid\t\tpw\t\t\n");
+
+	p = h->next;
+    while (p != NULL)
+    {
+    	if (p->flag == 0)
+    	{
+    		printf("master%d\t\t%s\t\t%s\n", i+1, p->id, p->pw);
+    		i++;
+    	}
+    	p=p->next;
+    }
+
+	p = h;
+    while (p->next != NULL)
+    {
+    	if (p->flag == 1)
+    	{
+    		printf("vip%d\t\t%s\t\t%s\n", j+1, p->id, p->pw);
+    		j++;
+    	}
+    	p=p->next;
+    }
+
+    p = h;
+    while (p->next != NULL)
+    {
+    	if (p->flag == 2)
+    	{
+    		printf("common%d\t\t%s\t\t%s\n", k+1, p->id, p->pw);
+    		k++;
+    	}
+    	p=p->next;
+    }
+
+	print_(40);
+
+	while (1)
+	{
+		printf("1. exit\n");
+		printf("input>");
+		scanf("%d", &input);
+		if (input == 1)
+		{
+			system("clear");
+			return 1;
+		}
+		else
+		{
+			printf("master, error,input again!\n");
+		}		
+	}
+    system("clear");
+}
+
+
+
+//管理员"修改"选择界面
+int admi_revise(p_user h)
+{
+	int input = 0;
+	while (1)
+	{
+		admi_revise_menu();
+		printf("master, select a option>");
+		scanf("%d", &input);
+		switch (input)
+		{
+			case 1:
+				admi_revise_adjust( h);
+				break;
+			case 2:
+				admi_revise_find( h);
+				break;
+			case 0:
+				return 0;
+			default:
+				system("clear");
+				printf("input error!\n");
+				break;
+		}
+	}
 
 }
 
 //管理员模块
-void administrator(p_user h)
+int administrator(p_user h)
 {
 	int input=0;
 	while (1)
@@ -192,15 +361,15 @@ void administrator(p_user h)
 				admi_delete( h);
 				break;
 			case 3:
-				// admi_revise();
+				admi_revise( h);
 				break;
 			case 4:
-				// admi_find();
+				admi_revise_find( h);
 				break;
 			case 0:
-				// admi_exit();
-				break;
+				return 1;
 			default:
+				printf("input error!\n\n");
 				break;
 		}
 	}

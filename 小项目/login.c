@@ -1,5 +1,131 @@
-#include "administrator.h"
+#include "common.h"
 
+
+/*--------------------航班部分--------------------*/
+//创建航班信息的头节点
+flight_info* flight_create()
+{
+	flight_info* h = (flight_info*)malloc(sizeof(flight_info));
+
+	if (h == NULL)
+	{
+		printf("航班创建失败!\n");
+		return NULL;
+	}
+
+	memset(h->start, 0, sizeof(h->start));
+	memset(h->destination, 0, sizeof(h->destination));
+	memset(h->data, 0, sizeof(h->data)); 
+
+	h->next = NULL;
+	return h;
+}
+
+//增加航班信息
+int  flight_add(flight_info* f)
+{
+	flight_info* new = (flight_info*)malloc(sizeof(flight_info));
+
+	if (new == NULL)
+	{
+		printf("增加失败！\n");
+		return 0;
+	}
+
+	int i = 0;
+	char c = 0;
+	char str[MAXSIZE_START] = {0};
+	float price = 0;
+	char class[MAXSIZE_CLASS]={'F', 'B', 'E'};
+
+	for (i=0; i<MAXSIZE_CLASS; i++)
+	{
+		printf("输入%d等舱的价格(按头等舱、商务舱、经济舱的顺序)>", i+1);
+		scanf("%f", &price);
+		new->price[i]=price;
+	}
+
+	for (i=0; i<MAXSIZE_CLASS; i++)
+	{
+		new->class[i]=class[i];
+	}
+
+	printf("输入班次>");
+	scanf("%d", &i);
+	new->flight_frequency = i;
+
+	while (getchar()!='\n');
+	printf("输入起点>");
+	scanf("%[^\n]", str);
+	while (getchar()!='\n');
+	strcpy(new->start, str);
+
+	memset(str, 0, sizeof(str));
+
+	printf("输入终点>");
+	scanf("%[^\n]", str);
+	while (getchar()!='\n');
+	strcpy(new->destination, str);
+
+	memset(str, 0, sizeof(str));
+
+	printf("输入日期>");
+	scanf("%[^\n]", str);
+	while (getchar()!='\n');
+	strcpy(new->data, str);	
+    
+	flight_info* p = NULL;
+
+	for (p = f; p->next != NULL; p=p->next);
+
+	new->next = p->next;
+	p->next = new;
+
+	return 1;
+
+}
+
+//打印航班信息
+void flight_print(flight_info* f)
+{
+	flight_info* p = NULL;
+	int i=0;
+
+	printf("班次\t起点\t终点\t\t日期\t\t舱位类型\n");
+	for (p = f->next; p != NULL; p=p->next)
+	{
+		printf("%d\t%s\t%s\t%s\t", 
+			p->flight_frequency, p->start, p->destination,
+			p->data);
+
+		for (i=0; i<MAXSIZE_CLASS; i++)
+		{
+			printf("%c\t", p->class[i]);
+		}
+		printf("\n\t\t\t\t\t\t");
+		for (i=0; i<MAXSIZE_CLASS; i++)
+		{
+			printf("%.2f\t", p->price[i]);			
+		}
+
+		printf("\n");
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*--------------------用户部分--------------------*/
 user* user_create(void)
 {
     user* head = (user*)malloc(sizeof(user));
@@ -140,7 +266,7 @@ void user_login(p_user person)
         	break;
         }
 
-        system("clear");
+        //system("clear");
 
         if (i != 0)
         {
@@ -166,8 +292,15 @@ void ManageSystem(void)
 	//flag=0代表该结构体信息为管理员信息
 	user_TailAdd(person, "333", "333", 0);
 
-	system("clear");
+	//创建航班信息
+	flight_info* f = flight_create();
+
+	flight_add( f);
+	flight_print( f);
+
+	//system("clear");
 
 	// user_login(person);
-    administrator(person);
+    // administrator(person);
+    //common(person);
 }

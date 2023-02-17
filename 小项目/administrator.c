@@ -1,4 +1,4 @@
-#include "administrator.h"
+#include "common.h"
 
 //打印-
 void print_(int num)
@@ -11,6 +11,7 @@ void print_(int num)
 //管理员操作界面
 void admi_menu()
 {
+	// system("clear");
 	print_(40);
 	printf("\t   administrator\n");
 	printf("\t1. increase new user\n");
@@ -66,6 +67,8 @@ int admi_add_user(p_user h, int flag)
 
 	new->next = p->next;
 	p->next = new;
+
+	return 1;
 }
 
 //管理员添加功能
@@ -177,6 +180,7 @@ int admi_delete(p_user h)
 //管理员修改菜单
 void admi_revise_menu()
 {
+	printf("\n");
 	print_(40);
 	printf("\t     revise menu\n");
 	printf("\t1. adjust user's grade\n");
@@ -186,10 +190,10 @@ void admi_revise_menu()
 }
 
 //管理员调整用户等级的菜单
-void admi_revise_adjust_menu()
+void admi_revise_adjust_menu(char* str)
 {
 	print_(40);
-	printf("\t    adjust user'grade\n");
+	printf("\t    adjust user(%s)'grade\n", str);
 	printf("\t0. to becomem administrator\n");
 	printf("\t1. to become vip\n");
 	printf("\t2. to become common\n");
@@ -200,8 +204,9 @@ void admi_revise_adjust_menu()
 //校验账号
 int admi_revise_adjust_IdCompare(p_user h)
 {
+	getchar();
 	char id[MAXSIZE_ID]={0};
-	printf("input id that needs to be adjusted!\n");
+	printf("input id that needs to be adjusted>");
 	scanf("%[^\n]", id);
 	while (getchar()!='\n');
 
@@ -211,11 +216,13 @@ int admi_revise_adjust_IdCompare(p_user h)
 	{
 		if (!strcmp(p->id, id))
 		{
-			admi_revise_adjust_menu();
+			admi_revise_adjust_menu(id);
+			printf("master, select a option>");
 			scanf("%d", &input);
 			if (input >=0 && input <=2) /*0、1、2分别代表三个等级的用户*/
 			{
 				p->flag = input;
+				system("clear");
 				printf("master, this user'grade is revised!\n");
 				return 0;
 			} 
@@ -237,9 +244,12 @@ int admi_revise_adjust_IdCompare(p_user h)
 int admi_revise_adjust(p_user h)
 {
 	int input=0;
-	user* temp=0;
+	int ret = 1;
 
-	while (admi_revise_adjust_IdCompare( h));
+	while (ret)
+	{
+		ret = admi_revise_adjust_IdCompare( h);
+	}
 }
 
 //账号信息查询
@@ -247,7 +257,7 @@ int admi_revise_find(p_user h)
 {
 	if (h->next == NULL)
 	{
-		printf("表空！\n");
+		printf("NULL！\n");
 		return 1;
 	}
 
@@ -264,29 +274,29 @@ int admi_revise_find(p_user h)
     {
     	if (p->flag == 0)
     	{
-    		printf("master%d\t\t%s\t\t%s\n", i+1, p->id, p->pw);
+    		printf("master_%d\t%s\t\t%s\n", i+1, p->id, p->pw);
     		i++;
     	}
     	p=p->next;
     }
 
-	p = h;
-    while (p->next != NULL)
+	p = h->next;
+    while (p != NULL)
     {
     	if (p->flag == 1)
     	{
-    		printf("vip%d\t\t%s\t\t%s\n", j+1, p->id, p->pw);
+    		printf("vip_%d\t\t%s\t\t%s\n", j+1, p->id, p->pw);
     		j++;
     	}
     	p=p->next;
     }
 
-    p = h;
-    while (p->next != NULL)
+    p = h->next;
+    while (p != NULL)
     {
     	if (p->flag == 2)
     	{
-    		printf("common%d\t\t%s\t\t%s\n", k+1, p->id, p->pw);
+    		printf("common_%d\t%s\t\t%s\n", k+1, p->id, p->pw);
     		k++;
     	}
     	p=p->next;
@@ -367,6 +377,7 @@ int administrator(p_user h)
 				admi_revise_find( h);
 				break;
 			case 0:
+				system("clear");
 				return 1;
 			default:
 				printf("input error!\n\n");

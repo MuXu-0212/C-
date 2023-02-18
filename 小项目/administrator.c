@@ -173,7 +173,7 @@ int admi_delete(p_user h)
 		else
 		{
 			printf("error, input again!\n\n");
-		}		
+		}
 	}
 }
 

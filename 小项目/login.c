@@ -85,13 +85,56 @@ int  flight_add(flight_info* f)
 
 }
 
+
+//航班信息自动添加
+int  flight_auto_add(flight_info* f, float F, float B, float E, 
+	int flight_frequency, char* start, char* destination, char* data)
+{
+	flight_info* new = (flight_info*)malloc(sizeof(flight_info));
+
+	if (new == NULL)
+	{
+		printf("增加失败！\n");
+		return 0;
+	}
+
+	char class[MAXSIZE_CLASS]={'F', 'B', 'E'};
+
+	new->flight_frequency = flight_frequency;
+
+	strcpy(new->start, start);
+	strcpy(new->destination, destination);
+	strcpy(new->data, data);
+
+	new->price[0]=F;
+	new->price[1]=B;
+	new->price[2]=E;
+
+
+	new->class[0] = class[0];
+	new->class[1] = class[1];
+	new->class[2] = class[2];
+
+    
+	flight_info* p = NULL;
+
+	for (p = f; p->next != NULL; p=p->next);
+
+	new->next = p->next;
+	p->next = new;
+
+	return 1;
+
+}
+
+
 //打印航班信息
 void flight_print(flight_info* f)
 {
 	flight_info* p = NULL;
 	int i=0;
 
-	printf("班次\t起点\t终点\t\t日期\t\t舱位类型\n");
+	printf("班次\t起点\t终点\t\t日期\t\t舱位类型及价格\n");
 	for (p = f->next; p != NULL; p=p->next)
 	{
 		printf("%d\t%s\t%s\t%s\t", 
@@ -105,17 +148,12 @@ void flight_print(flight_info* f)
 		printf("\n\t\t\t\t\t\t");
 		for (i=0; i<MAXSIZE_CLASS; i++)
 		{
-			printf("%.2f\t", p->price[i]);			
+			printf("%.2f\t", p->price[i]);
 		}
 
 		printf("\n");
 	}
 }
-
-
-
-
-
 
 
 
@@ -282,6 +320,7 @@ void user_login(p_user person)
 
 void ManageSystem(void)
 {
+//用户信息库
 	//flag=2代表该结构体信息为普通用户信息
 	user* person = user_create();
 	user_TailAdd(person, "111", "111", 2);
@@ -292,15 +331,22 @@ void ManageSystem(void)
 	//flag=0代表该结构体信息为管理员信息
 	user_TailAdd(person, "333", "333", 0);
 
+
+//航班信息库
 	//创建航班信息
 	flight_info* f = flight_create();
 
-	flight_add( f);
-	flight_print( f);
+//程序内部,手动定义两个航班
+	flight_auto_add( f, 789, 456, 123, 1, "wuhan", "shanghai", "23/02/18");
+	flight_auto_add( f, 789, 456, 123, 2, "wuhan", "beijing ", "23/02/19");
 
 	//system("clear");
 
+	// flight_add( f); //管理员添加航班
+	 flight_print( f);  //打印航班信息
+
+
 	// user_login(person);
     // administrator(person);
-    //common(person);
+    common(person);
 }

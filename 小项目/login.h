@@ -9,13 +9,13 @@
 #define MAXSIZE_ID 30
 #define MAXSIZE_PW 30
 
-#define MAXSIZE_START 30
-#define MAXSIZE_DESTINATION 30
-#define MAXSIZE_DATA 30
-#define MAXSIZE_CLASS 3
+#define MAXSIZE_START 30	//航班起点
+#define MAXSIZE_DESTINATION 30	//航班终点
+#define MAXSIZE_DATA 30		//日期
+#define MAXSIZE_CLASS 3	    //座舱类型
 
 
-//账号登录信息
+//账号登录信息结构体
 typedef struct user{
 	char id[MAXSIZE_ID];
 	char pw[MAXSIZE_PW];
@@ -23,7 +23,7 @@ typedef struct user{
 	struct user* next;
 }user,* p_user;
 
-//航班信息
+//航班信息结构体
 typedef struct flight_info
 {
 	int flight_frequency;	//班次
@@ -37,13 +37,20 @@ typedef struct flight_info
 	struct flight_info* next; 
 }flight_info, *p_flight;
 
-
+//用户信息结构体
+// typedef struct userinfo{
+// 	int 
+// 	struct userinfo* next; 
+// }userinfo,* p_userinfo;
 
 /*--------------------航班部分--------------------*/
-extern flight_info* flight_create();
-extern int flight_add(flight_info* f);
-extern void flight_print(flight_info* f);
+extern flight_info* flight_create(); //创建航班信息的头节点
+extern int flight_add(flight_info* f); //增加航班信息
+extern void flight_print(flight_info* f); //打印航班信息
 
+//航班信息自动添加  //程序内部,手动定义两个航班
+extern int  flight_auto_add(flight_info* f, float F, float B, float E, 
+ int flight_frequency, char* start, char* destination, char* data);
 
 
 

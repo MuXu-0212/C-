@@ -2474,5 +2474,27 @@ int main(int argc, char const *argv[])
 题目：请使用任意一种链表，使用任意一种排序算法对链表内的节点从小到大进行排序(把排序算法封
 装为函数，只需要写排序部分即可)
 
+【程序98】 
+题目：题目:判断大小端序
+
+#include <stdio.h>
+
+int main(int argc, char const *argv[])
+{
+	int a=1;
+
+	char* p=(char* )(&a);
+
+	if (*p == 1)
+    {
+    	printf("小端序!\n");
+    }
+    else
+    {
+    	printf("大端序!\n");
+    }
+	return 0;
+}
+
 
 

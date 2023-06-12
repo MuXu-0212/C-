@@ -1,5 +1,6 @@
 #include <stdio.h>
 
+
 int main(int argc, char const *argv[])
 {
 	int i = 1, j = 1, k = 1, count = 1;

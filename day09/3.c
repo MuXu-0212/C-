@@ -90,7 +90,6 @@ void linklist_scanf(linklist head)
 }
 
 
-
 int main(int argc, char const *argv[])
 {
 	lnode* h = (lnode*)malloc(sizeof(lnode));
